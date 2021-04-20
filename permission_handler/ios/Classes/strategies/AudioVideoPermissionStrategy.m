@@ -1,91 +1,91 @@
-//
-// Created by Razvan Lung(long1eu) on 2019-02-15.
-// Copyright (c) 2019 The Chromium Authors. All rights reserved.
-//
+// //
+// // Created by Razvan Lung(long1eu) on 2019-02-15.
+// // Copyright (c) 2019 The Chromium Authors. All rights reserved.
+// //
 
-#import "AudioVideoPermissionStrategy.h"
+// #import "AudioVideoPermissionStrategy.h"
 
-#if PERMISSION_CAMERA | PERMISSION_MICROPHONE
+// #if PERMISSION_CAMERA | PERMISSION_MICROPHONE
 
-@implementation AudioVideoPermissionStrategy
+// @implementation AudioVideoPermissionStrategy
 
-- (PermissionStatus)checkPermissionStatus:(PermissionGroup)permission {
-    if (permission == PermissionGroupCamera) {
-        #if PERMISSION_CAMERA
-        return [AudioVideoPermissionStrategy permissionStatus:AVMediaTypeVideo];
-        #endif
-    } else if (permission == PermissionGroupMicrophone) {
-        #if PERMISSION_MICROPHONE
-        return [AudioVideoPermissionStrategy permissionStatus:AVMediaTypeAudio];
-        #endif
-    }
-    return PermissionStatusDenied;
-}
+// - (PermissionStatus)checkPermissionStatus:(PermissionGroup)permission {
+//     if (permission == PermissionGroupCamera) {
+//         #if PERMISSION_CAMERA
+//         return [AudioVideoPermissionStrategy permissionStatus:AVMediaTypeVideo];
+//         #endif
+//     } else if (permission == PermissionGroupMicrophone) {
+//         #if PERMISSION_MICROPHONE
+//         return [AudioVideoPermissionStrategy permissionStatus:AVMediaTypeAudio];
+//         #endif
+//     }
+//     return PermissionStatusDenied;
+// }
 
-- (ServiceStatus)checkServiceStatus:(PermissionGroup)permission {
-    return ServiceStatusNotApplicable;
-}
+// - (ServiceStatus)checkServiceStatus:(PermissionGroup)permission {
+//     return ServiceStatusNotApplicable;
+// }
 
-- (void)requestPermission:(PermissionGroup)permission completionHandler:(PermissionStatusHandler)completionHandler {
-    PermissionStatus status = [self checkPermissionStatus:permission];
+// - (void)requestPermission:(PermissionGroup)permission completionHandler:(PermissionStatusHandler)completionHandler {
+//     PermissionStatus status = [self checkPermissionStatus:permission];
 
-    if (status != PermissionStatusDenied) {
-        completionHandler(status);
-        return;
-    }
+//     if (status != PermissionStatusDenied) {
+//         completionHandler(status);
+//         return;
+//     }
 
-    AVMediaType mediaType;
+//     AVMediaType mediaType;
 
-    if (permission == PermissionGroupCamera) {
-        #if PERMISSION_CAMERA
-        mediaType = AVMediaTypeVideo;
-        #else
-        completionHandler(PermissionStatusDenied);
-        return;
-        #endif
-    } else if (permission == PermissionGroupMicrophone) {
-        #if PERMISSION_MICROPHONE
-        mediaType = AVMediaTypeAudio;
-        #else
-        completionHandler(PermissionStatusDenied);
-        return;
-        #endif
-    } else {
-        completionHandler(PermissionStatusDenied);
-        return;
-    }
+//     if (permission == PermissionGroupCamera) {
+//         #if PERMISSION_CAMERA
+//         mediaType = AVMediaTypeVideo;
+//         #else
+//         completionHandler(PermissionStatusDenied);
+//         return;
+//         #endif
+//     } else if (permission == PermissionGroupMicrophone) {
+//         #if PERMISSION_MICROPHONE
+//         mediaType = AVMediaTypeAudio;
+//         #else
+//         completionHandler(PermissionStatusDenied);
+//         return;
+//         #endif
+//     } else {
+//         completionHandler(PermissionStatusDenied);
+//         return;
+//     }
 
-    [AVCaptureDevice requestAccessForMediaType:mediaType completionHandler:^(BOOL granted) {
-        if (granted) {
-            completionHandler(PermissionStatusGranted);
-        } else {
-            completionHandler(PermissionStatusPermanentlyDenied);
-        }
-    }];
-}
+//     [AVCaptureDevice requestAccessForMediaType:mediaType completionHandler:^(BOOL granted) {
+//         if (granted) {
+//             completionHandler(PermissionStatusGranted);
+//         } else {
+//             completionHandler(PermissionStatusPermanentlyDenied);
+//         }
+//     }];
+// }
 
-+ (PermissionStatus)permissionStatus:(AVMediaType const)mediaType {
-    AVAuthorizationStatus status = [AVCaptureDevice authorizationStatusForMediaType:mediaType];
+// + (PermissionStatus)permissionStatus:(AVMediaType const)mediaType {
+//     AVAuthorizationStatus status = [AVCaptureDevice authorizationStatusForMediaType:mediaType];
 
-    switch (status) {
-        case AVAuthorizationStatusNotDetermined:
-            return PermissionStatusDenied;
-        case AVAuthorizationStatusRestricted:
-            return PermissionStatusRestricted;
-        case AVAuthorizationStatusDenied:
-            return PermissionStatusPermanentlyDenied;
-        case AVAuthorizationStatusAuthorized:
-            return PermissionStatusGranted;
-    }
+//     switch (status) {
+//         case AVAuthorizationStatusNotDetermined:
+//             return PermissionStatusDenied;
+//         case AVAuthorizationStatusRestricted:
+//             return PermissionStatusRestricted;
+//         case AVAuthorizationStatusDenied:
+//             return PermissionStatusPermanentlyDenied;
+//         case AVAuthorizationStatusAuthorized:
+//             return PermissionStatusGranted;
+//     }
 
-    return PermissionStatusDenied;
-}
+//     return PermissionStatusDenied;
+// }
 
-@end
+// @end
 
-#else
+// #else
 
-@implementation AudioVideoPermissionStrategy
-@end
+// @implementation AudioVideoPermissionStrategy
+// @end
 
-#endif
+// #endif

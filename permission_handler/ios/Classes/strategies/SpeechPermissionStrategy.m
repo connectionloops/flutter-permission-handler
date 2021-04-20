@@ -1,68 +1,68 @@
-//
-// Created by Razvan Lung(long1eu) on 2019-02-15.
-// Copyright (c) 2019 The Chromium Authors. All rights reserved.
-//
+// //
+// // Created by Razvan Lung(long1eu) on 2019-02-15.
+// // Copyright (c) 2019 The Chromium Authors. All rights reserved.
+// //
 
-#import "SpeechPermissionStrategy.h"
+// #import "SpeechPermissionStrategy.h"
 
-#if PERMISSION_SPEECH_RECOGNIZER
+// #if PERMISSION_SPEECH_RECOGNIZER
 
-@implementation SpeechPermissionStrategy
-- (PermissionStatus)checkPermissionStatus:(PermissionGroup)permission {
-    return [SpeechPermissionStrategy permissionStatus];
-}
+// @implementation SpeechPermissionStrategy
+// - (PermissionStatus)checkPermissionStatus:(PermissionGroup)permission {
+//     return [SpeechPermissionStrategy permissionStatus];
+// }
 
-- (ServiceStatus)checkServiceStatus:(PermissionGroup)permission {
-    return ServiceStatusNotApplicable;
-}
+// - (ServiceStatus)checkServiceStatus:(PermissionGroup)permission {
+//     return ServiceStatusNotApplicable;
+// }
 
-- (void)requestPermission:(PermissionGroup)permission completionHandler:(PermissionStatusHandler)completionHandler {
-    PermissionStatus status = [self checkPermissionStatus:permission];
+// - (void)requestPermission:(PermissionGroup)permission completionHandler:(PermissionStatusHandler)completionHandler {
+//     PermissionStatus status = [self checkPermissionStatus:permission];
     
-    if (status != PermissionStatusDenied) {
-        completionHandler(status);
-        return;
-    }
+//     if (status != PermissionStatusDenied) {
+//         completionHandler(status);
+//         return;
+//     }
     
-    if (@available(iOS 10.0, *)) {
-        [SFSpeechRecognizer requestAuthorization:^(SFSpeechRecognizerAuthorizationStatus authorizationStatus) {
-            completionHandler([SpeechPermissionStrategy determinePermissionStatus:authorizationStatus]);
-        }];
-    } else {
-        completionHandler(PermissionStatusDenied);
-    }
-}
+//     if (@available(iOS 10.0, *)) {
+//         [SFSpeechRecognizer requestAuthorization:^(SFSpeechRecognizerAuthorizationStatus authorizationStatus) {
+//             completionHandler([SpeechPermissionStrategy determinePermissionStatus:authorizationStatus]);
+//         }];
+//     } else {
+//         completionHandler(PermissionStatusDenied);
+//     }
+// }
 
-+ (PermissionStatus)permissionStatus {
-    if (@available(iOS 10.0, *)) {
-        SFSpeechRecognizerAuthorizationStatus status = [SFSpeechRecognizer authorizationStatus];
+// + (PermissionStatus)permissionStatus {
+//     if (@available(iOS 10.0, *)) {
+//         SFSpeechRecognizerAuthorizationStatus status = [SFSpeechRecognizer authorizationStatus];
         
-        return [SpeechPermissionStrategy determinePermissionStatus:status];
-    }
+//         return [SpeechPermissionStrategy determinePermissionStatus:status];
+//     }
     
-    return PermissionStatusDenied;
-}
+//     return PermissionStatusDenied;
+// }
 
-+ (PermissionStatus)determinePermissionStatus:(SFSpeechRecognizerAuthorizationStatus)authorizationStatus  API_AVAILABLE(ios(10.0)){
-    switch (authorizationStatus) {
-        case SFSpeechRecognizerAuthorizationStatusNotDetermined:
-            return PermissionStatusDenied;
-        case SFSpeechRecognizerAuthorizationStatusDenied:
-            return PermissionStatusPermanentlyDenied;
-        case SFSpeechRecognizerAuthorizationStatusRestricted:
-            return PermissionStatusRestricted;
-        case SFSpeechRecognizerAuthorizationStatusAuthorized:
-            return PermissionStatusGranted;
-    }
+// + (PermissionStatus)determinePermissionStatus:(SFSpeechRecognizerAuthorizationStatus)authorizationStatus  API_AVAILABLE(ios(10.0)){
+//     switch (authorizationStatus) {
+//         case SFSpeechRecognizerAuthorizationStatusNotDetermined:
+//             return PermissionStatusDenied;
+//         case SFSpeechRecognizerAuthorizationStatusDenied:
+//             return PermissionStatusPermanentlyDenied;
+//         case SFSpeechRecognizerAuthorizationStatusRestricted:
+//             return PermissionStatusRestricted;
+//         case SFSpeechRecognizerAuthorizationStatusAuthorized:
+//             return PermissionStatusGranted;
+//     }
     
-    return PermissionStatusDenied;
-}
+//     return PermissionStatusDenied;
+// }
 
-@end
+// @end
 
-#else
+// #else
 
-@implementation SpeechPermissionStrategy
-@end
+// @implementation SpeechPermissionStrategy
+// @end
 
-#endif
+// #endif

@@ -3,19 +3,19 @@
 // Copyright (c) 2019 The Chromium Authors. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "PermissionStrategy.h"
+// #import <Foundation/Foundation.h>
+// #import "PermissionStrategy.h"
 
-#if PERMISSION_CAMERA | PERMISSION_MICROPHONE
-#import <AVFoundation/AVFoundation.h>
+// #if PERMISSION_CAMERA | PERMISSION_MICROPHONE
+// #import <AVFoundation/AVFoundation.h>
 
-@interface AudioVideoPermissionStrategy : NSObject <PermissionStrategy>
-@end
+// @interface AudioVideoPermissionStrategy : NSObject <PermissionStrategy>
+// @end
 
-#else
+// #else
 
-#import "UnknownPermissionStrategy.h"
-@interface AudioVideoPermissionStrategy : UnknownPermissionStrategy
-@end
+// #import "UnknownPermissionStrategy.h"
+// @interface AudioVideoPermissionStrategy : UnknownPermissionStrategy
+// @end
 
-#endif
+// #endif
